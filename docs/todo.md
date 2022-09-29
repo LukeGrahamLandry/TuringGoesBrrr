@@ -1,0 +1,23 @@
+- circuits
+    - render
+         - expand out components into different levels of abstraction 
+            - so i need optimal solutions to every turing complete level
+    - edit
+    - simulate
+- import/export
+    - minecraft redstone 
+        - to structures nbt format or mod that places the blocks for you
+    - Turing Complete save format 
+        - they provide a CC0 library in nim which seems to compile to js
+            - https://github.com/Stuffe/save_monger
+            - https://github.com/nim-lang/Nim/wiki/Nim-for-TypeScript-Programmers
+    - logisim
+    - verilog 
+        - turing complete can also export to this? but i think it doesn't do position data so wouldn't be visually the same circuit
+    - javascript
+        - define custom components with a java script function that gets compiled to wasm so it can be sand boxed
+- infrastructure for automated tests of your circuits 
+    - let me run the same test format for each exported format
+        - make a bunch of schematics that get checked every time so i can know i didn't break anything
+        - mod that does the same tests in minecraft so i can check the exports work
+    - levels where you build a gate from simpler ones and it evaluates performance against some tests
