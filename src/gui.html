@@ -4,8 +4,15 @@
         margin-top: 5px;
     }
 </style>
-<input type="file" onchange="openTCfile()" id="tcfile">  <button onclick="clearCanvas()">Clear</button><br>
-<canvas id="myCanvas" width="500" height="500">
+
+<input type="file" onchange="openTCfile()" id="tcfile">
+<a id="canvasdownloadlink" download="circuit.png"><button> Download Image </button></a>
+<button onclick="clearCanvas()">Clear</button>
+<br><button onclick="importBase64TC()"> Import base64 </button> <button onclick="exportBase64TC()"> Export base64 </button>
+
+<br> <canvas id="myCanvas" width="500" height="500"> <br>
+
+
 
 <script src="../out/lib/snappyjs.js"></script>
 <script>
@@ -17,11 +24,13 @@
     }
 </script>
 <script src="../out/lib/save_monger.js"></script>
+<script src="../out/evaluate.js"></script>
 <script>
     const base64ToUint8 = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
     const uint8ToBase64 = (arr) => btoa(Array(arr.length).fill('').map((_, i) => String.fromCharCode(arr[i])).join(''));
 
     if (window.localStorage.getItem("turingcompletegamesave") != null){
+        console.log("Restoring circuit from local storage!")
         parseCircuit(base64ToUint8(window.localStorage.getItem("turingcompletegamesave")));
     }
 
@@ -94,11 +103,16 @@
         let xOffset = 150;
         let yOffset = 250;
 
-        ctx.strokeStyle = "black";
         circuit.components.forEach(element => {
+            ctx.strokeStyle = "black";
             ctx.beginPath();
             ctx.arc(element.position.x * scale + xOffset, element.position.y * scale + yOffset, 10, 0, 2 * Math.PI);
             ctx.stroke();
+
+            ctx.strokeStyle = "magenta";
+            ctx.fillStyle = "magenta";
+            ctx.font = "15px Arial";
+            ctx.fillText(element.kind, element.position.x * scale + xOffset - (element.kind > 99 ? 13 : element.kind > 9 ? 8 : 4), element.position.y * scale + yOffset + 5);
         });
 
         let wireColors = ["orange", "black","black","cyan","black","black","black","purple","black","black","grey","black","black"]
@@ -128,6 +142,13 @@
         });
     }
 
+    function downloadCanvasImage() {
+        var c = document.getElementById("myCanvas");
+        var dt = c.toDataURL('image/png');
+        this.href = dt.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+    };
+    document.getElementById("canvasdownloadlink").addEventListener('click', downloadCanvasImage, false);
+
     function clearCanvas(){
         var c = document.getElementById("myCanvas");
         var ctx = c.getContext("2d");
@@ -135,5 +156,19 @@
         console.log("Clearing Circuit!")
         console.log(window.localStorage.getItem("turingcompletegamesave"));
         window.localStorage.removeItem("turingcompletegamesave");
+    }
+
+    function importBase64TC(){
+        let encoded = prompt("Paste a base64 encoded Turing Complete circuit save file. ");
+        if (encoded == null || encoded == "") return;
+
+        console.log("Clearing Circuit!")
+        console.log(window.localStorage.getItem("turingcompletegamesave"));
+        parseCircuit(base64ToUint8(encoded));
+        window.localStorage.setItem("turingcompletegamesave", encoded);
+    }
+
+    function exportBase64TC(){
+        prompt("Copy this base64 string. It represents a Turing Complete circuit save file.", window.localStorage.getItem("turingcompletegamesave"))
     }
 </script>
