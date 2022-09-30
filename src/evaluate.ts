@@ -1,26 +1,40 @@
 // like an adjacency list generated from the tc save
 // start with the static input components and add their connections in order
 // no obligation that the action be a pure function
-let circuit = [
+
+type ExecutableCircuit = Array<ExecutionNode>;
+
+type WireData = Boolean | number;
+type WireLabel = number | string;
+
+interface ExecutionNode {
+    in: Array<WireLabel>,
+    out: Array<WireLabel>,
+    action(data: Array<WireData>): Array<WireData>
+}
+
+type VariableStore = Map<WireLabel, WireData> // todo: refactor to use this
+
+let circuit: ExecutableCircuit = [
     {
-        in: [],
+        in: ["in0"],
         out: [1],
-        action: (data, parentInputData) => [parentInputData[0]]
+        action: (data) => data
     },
     {
-        in: [],
+        in: ["in1"],
         out: [2],
-        action: (data, parentInputData) => [parentInputData[1]]
+        action: (data) => data
     },
     {
         in: [1, 2],
         out: ["output"],
-        action: (data, parentInputData) => [data[0] || data[1]]
+        action: (data) => [data[0] || data[1]]
     }, 
     {
         in: ["output"],
         out: [],
-        action: (a, b) => undefined
+        action: (a) => undefined
     }
 ]
 
@@ -33,6 +47,10 @@ export function evaluateCircuit(circuit, parentInputData){
     }
     // which components have already been processed
     let completed = [];
+
+    for (let i=0;i<parentInputData.length;i++){
+        variables["in" + i] = parentInputData[i];
+    }
 
     while (completed.length < circuit.length){
         for (let c=0;c<circuit.length;c++){
@@ -55,7 +73,7 @@ export function evaluateCircuit(circuit, parentInputData){
             if (error) continue;
 
             // evaluate
-            let outputData = component.action(inputData, parentInputData, parentInputData);
+            let outputData = component.action(inputData);
 
             // write output array into variables
             for (let i=0;i<component.out.length;i++){
@@ -73,7 +91,7 @@ export function evaluateCircuit(circuit, parentInputData){
 
 // compiles a circuit to a javascript functions
 // outputVariableNames are the circuit variables whose value the js function will output (as an array)
-export function wrapCircuit(circuit, outputVariableNames){
+function wrapCircuit(circuit, outputVariableNames){
     return (inputs) => {
         let endingVariables = evaluateCircuit(circuit, inputs);
         let outputs = [];
@@ -86,7 +104,7 @@ export function wrapCircuit(circuit, outputVariableNames){
 
 // run a circuit with the inputs testSpec.in and compare the output to testSpec.out
 // returns true if the circuit's output matches the desired one
-export function testCircuit(circuit, testSpec){
+function testCircuit(circuit, testSpec){
     let endingVariables = evaluateCircuit(circuit, testSpec.in);
     let success = true;
     for (let name in testSpec.out) {
@@ -103,21 +121,25 @@ function iterateBits(){
     return [true, false];
 }
 
-// test whether my example circuit behaves the same as the OR operator for every combination of input bits
-let count = 0;
-for (let a in iterateBits()){
-    for (let b in iterateBits()){
-        let scenario = {
-            in: [a, b],
-            out: {"output": (a || b)}
-        };
-        if (testCircuit(circuit, scenario)){
-            count++;
+export function checkEvalCircuit(){
+    console.log("testing circuit evaluate.ts");
+
+    // test whether my example circuit behaves the same as the OR operator for every combination of input bits
+    let count = 0;
+    for (let a in iterateBits()){
+        for (let b in iterateBits()){
+            let scenario = {
+                in: [a, b],
+                out: {"output": (a || b)}
+            };
+            if (testCircuit(circuit, scenario)){
+                count++;
+            }
         }
     }
-}
-console.log("or gate passed " + count + "/4 tests");
+    console.log("or gate passed " + count + "/4 tests");
 
-let orGateFunction = wrapCircuit(circuit, ["output"]);
-console.log(orGateFunction([true, false]))
+    let orGateFunction = wrapCircuit(circuit, ["output"]);
+    console.log(orGateFunction([true, false]))
+}
 

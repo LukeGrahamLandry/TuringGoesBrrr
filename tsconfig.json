@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
+      "outDir": "./dist/",
+      "module": "es6",
       "target": "es5",
-      "module": "commonjs",
-      "sourceMap": true,
-      "outDir": "out",
-      "checkJs": true
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node"
     }
   }
+  

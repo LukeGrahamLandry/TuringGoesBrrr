@@ -1,0 +1,28 @@
+<style>
+    canvas {
+        border: 4px solid black;
+        margin-top: 5px;
+    }
+</style>
+
+<input type="file" id="turingCompleteGameFileInput">
+<a id="canvasdownloadlink" download="circuit.png"><button> Download Image </button></a>
+<button id="clearCanvasButton">Clear</button>
+<br><button id="importBase64Button"> Import base64 </button> <button id="exportBase64Button"> Export base64 </button> <br>
+<button id="changeSettingsButton"> Edit Settings </button>
+
+<br> <canvas id="myCanvas" width="500" height="500"></canvas> <br>
+
+<script src="lib/snappyjs.min.js"></script>
+<script>
+    function compress(input){
+        return SnappyJS.compress(new Uint8Array(input));
+    }
+    function uncompress(input){
+        return SnappyJS.uncompress(new Uint8Array(input), Number.MAX_SAFE_INTEGER);
+    }
+
+    window.SaveMonger = {};
+</script>
+<script src="lib/save_monger.min.js"></script>
+<script src="main.js"></script>

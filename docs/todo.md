@@ -3,14 +3,13 @@
          - expand out components into different levels of abstraction 
             - so i need optimal solutions to every turing complete level
     - edit
+        - ui for defining custom components 
     - simulate
+        - my component definitions should have type info on the inputs then i can check if graph definition is valid and have good error messages 
 - import/export
     - minecraft redstone 
         - to structures nbt format or mod that places the blocks for you
-    - Turing Complete save format 
-        - they provide a CC0 library in nim which seems to compile to js
-            - https://github.com/Stuffe/save_monger
-            - https://github.com/nim-lang/Nim/wiki/Nim-for-TypeScript-Programmers
+    - Turing Complete save format
     - logisim
     - verilog 
         - turing complete can also export to this? but i think it doesn't do position data so wouldn't be visually the same circuit
@@ -21,3 +20,22 @@
         - make a bunch of schematics that get checked every time so i can know i didn't break anything
         - mod that does the same tests in minecraft so i can check the exports work
     - levels where you build a gate from simpler ones and it evaluates performance against some tests
+- ui
+    - drop down menus
+        - import
+            - ask if replace circuit or as custom component so should be able to render targeting a different canvas 
+        - export
+        - edit
+            - move
+            - move and keep wire connections
+            - pan canvas
+            - delete
+            - add component: menus for bit sizes and show custom components 
+        - run
+            - some way to give it test definitions 
+            - warning when a circuit component isn't supported yet
+        - about: links to docs md
+    - rendering elements above the canvas for setting inputs
+- when TC lets users define levels, have a way to import them 
+    - let people who own the game can just point it at the tc folder and access them all in my program without me sketchily distributing or recrating TC's IP
+        - would be good to have a nice UI for exploring these
