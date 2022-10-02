@@ -2,6 +2,10 @@ function parse_state(data: Uint8Array): Circuit {
     return (window as any).SaveMonger.parse_state(data);
 }
 
+export function getComponentName(value: number): string {
+    return (window as any).SaveMonger.component_kinds[value];
+}
+
 export function parseTuringCompleteFile(circuitData: Uint8Array): Circuit {
     let circuit = parse_state(circuitData);
 
@@ -51,4 +55,12 @@ export function parseTuringCompleteFile(circuitData: Uint8Array): Circuit {
     });
 
     return circuit;
+}
+
+export function base64ToUint8(str: string): Uint8Array{
+    return Uint8Array.from(atob(str), (c) => c.charCodeAt(0))
+}
+
+export function uint8ToBase64(arr: Uint8Array): string{
+    return btoa(Array(arr.length).fill('').map((_, i) => String.fromCharCode(arr[i])).join(''))
 }

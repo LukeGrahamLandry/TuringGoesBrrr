@@ -12,6 +12,8 @@
     - `settings`: wire colour pallette, debug mode, etc
 - `SaveMonger` 
     - `parse_state`: accesses the nim function that parses binary Turing Complete Game save files into a usable object. Note that this does not preform normalization
+    - `state_to_binary`
+    - `component_kinds`: maps component ids to names
 - `SnappyJS`
     - `uncompress`: used by save_monger
     - `compress`

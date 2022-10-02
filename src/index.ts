@@ -1,25 +1,19 @@
-import {parseTuringCompleteFile} from "./format/turingcomplete"
-import {checkEvalCircuit} from "./evaluate"
-import {Settings} from "./settings"
+import { parseTuringCompleteFile, getComponentName, base64ToUint8, uint8ToBase64 } from './format/turingcomplete';
+import {runTests} from "./tests/tests"
+import {getDemoCircuits} from "./tests/demoCircuits"
+import {Settings, settings} from "./settings"
 
-checkEvalCircuit();
-
-const base64ToUint8 = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
-const uint8ToBase64 = (arr) => btoa(Array(arr.length).fill('').map((_, i) => String.fromCharCode(arr[i])).join(''));
-const settings = new Settings(reDrawCircuit);
-(window as any).TuringGoesBrrr = {
-    settings: settings
-}
+(window as any).TuringGoesBrrr.settings = new Settings(reDrawCircuit);
 
 const TURINGCOMPLETE_SAVE_KEY = "turingcompletegamesave";
 
 if (window.localStorage.getItem(TURINGCOMPLETE_SAVE_KEY) != null){
     debugLog("Restoring circuit from local storage!");
-    handleTC(base64ToUint8(window.localStorage.getItem(TURINGCOMPLETE_SAVE_KEY)))
+    handleTC(base64ToUint8(window.localStorage.getItem(TURINGCOMPLETE_SAVE_KEY)));
 }
 
 function debugLog(s){
-    if (settings.get().debug){
+    if (settings().debug){
         console.log(s);
     }
 }
@@ -48,29 +42,38 @@ function handleTC(circuitData){
     window.localStorage.setItem(TURINGCOMPLETE_SAVE_KEY, uint8ToBase64(circuitData));
 }
 
-function drawCircuit(circuit){
-    var c = document.getElementById("myCanvas") as HTMLCanvasElement;
-    var ctx = c.getContext("2d");
-    ctx.clearRect(0, 0, c.width, c.height);
+function drawCircuit(circuit: Circuit, canvas: HTMLCanvasElement = document.getElementById("myCanvas") as HTMLCanvasElement){
+    var ctx = canvas.getContext("2d");
+
+    ctx.canvas.width  = window.innerWidth * 0.9;
+    ctx.canvas.height = window.innerHeight - 100;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = settings().backgroundColour;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     let scale = 10;
     let xOffset = 150;
     let yOffset = 250;
 
-    circuit.components.forEach(element => {
+    function drawComponent(component: Component){
         ctx.strokeStyle = "black";
         ctx.beginPath();
-        ctx.arc(element.position.x * scale + xOffset, element.position.y * scale + yOffset, 10, 0, 2 * Math.PI);
+        ctx.arc(component.position.x * scale + xOffset, component.position.y * scale + yOffset, 10, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.strokeStyle = "magenta";
         ctx.fillStyle = "magenta";
         ctx.font = "15px Arial";
-        ctx.fillText(element.kind, element.position.x * scale + xOffset - (element.kind > 99 ? 13 : element.kind > 9 ? 8 : 4), element.position.y * scale + yOffset + 5);
-    });
+        ctx.textAlign = "center";
+        ctx.fillText(getComponentName(component.kind), component.position.x * scale + xOffset, component.position.y * scale + yOffset + 5);
+    }
 
-    circuit.wires.forEach(wire => {
-        ctx.strokeStyle = settings.get().wireColourPalette[wire.color];
+    circuit.components.forEach(drawComponent);
+
+    function drawWire(wire: Wire){
+        ctx.strokeStyle = settings().wireColourPalette[wire.color];
 
         ctx.beginPath();
         
@@ -91,7 +94,9 @@ function drawCircuit(circuit){
             ctx.arc(point.x * scale + xOffset, point.y * scale + yOffset, 3, 0, 2 * Math.PI);
             ctx.stroke();
         });
-    });
+    }
+
+    circuit.wires.forEach(drawWire);
 }
 
 function downloadCanvasImage() {
@@ -124,7 +129,13 @@ function reDrawCircuit(){
     handleTC(base64ToUint8(window.localStorage.getItem(TURINGCOMPLETE_SAVE_KEY)));
 }
 
+function loadExample(){
+    handleTC(base64ToUint8(getDemoCircuits()[3].circuitData))
+}
+
 document.getElementById("exportBase64Button").onclick = exportBase64TC;
 document.getElementById("importBase64Button").onclick = importBase64TC;
 document.getElementById("clearCanvasButton").onclick = clearCanvas;
+document.getElementById("runTestsButton").onclick = runTests;
+document.getElementById("loadExampleButton").onclick = loadExample;
 document.getElementById("turingCompleteGameFileInput").onchange = openTCfile;

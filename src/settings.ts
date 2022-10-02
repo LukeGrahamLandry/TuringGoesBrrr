@@ -1,4 +1,5 @@
 interface SettingsData {
+    backgroundColour: string | CanvasGradient | CanvasPattern;
     readonly wireColourPalette: string[];
     readonly debug: boolean
 }
@@ -7,7 +8,8 @@ export class Settings {
     readonly storageKey = "circuitdisplaysettings";
     default: SettingsData = {
         wireColourPalette: ["orange", "black","black","cyan","black","black","black","purple","black","black","grey","black","black"],
-        debug: true
+        debug: true,
+        backgroundColour: "#32394c"
     };
     active: SettingsData;
     onChange: () => void = () => {};
@@ -43,4 +45,8 @@ export class Settings {
     private loadFromStorage() {
         this.load(window.localStorage.getItem(this.storageKey));
     }
+}
+
+export function settings(): SettingsData {
+    return (window as any).TuringGoesBrrr.settings.get()
 }

@@ -3,14 +3,12 @@
 // no obligation that the action be a pure function
 
 type ExecutableCircuit = Array<ExecutionNode>;
-
-type WireData = Boolean | number;
 type WireLabel = number | string;
 
 interface ExecutionNode {
     in: Array<WireLabel>,
     out: Array<WireLabel>,
-    action(data: Array<WireData>): Array<WireData>
+    action(data: WireData[]): WireData[]
 }
 
 type VariableStore = Map<WireLabel, WireData> // todo: refactor to use this

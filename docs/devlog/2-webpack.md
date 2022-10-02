@@ -50,4 +50,4 @@ These preferences can be imported and exported as a json string which can be pas
 
 ## Markdown Pages
 
-little script that builds the markdown files in the docs directory into html files
+Setup a little script that builds the markdown files in the docs directory into html files. Wrote some simple css that makes it look kinda like github's markdown rendering. 
