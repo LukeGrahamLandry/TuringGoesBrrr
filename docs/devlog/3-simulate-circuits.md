@@ -19,8 +19,3 @@ started writing tests for things. run when click a button and log which ones fai
 
 - check that my base64 encode and decode functions are inverses of each other
   
-## Animations
-
-PLAN:
-animate data traveling along wire, lerp between points on wire
-allow disable in settings

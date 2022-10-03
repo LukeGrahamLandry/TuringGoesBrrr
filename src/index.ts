@@ -2,8 +2,11 @@ import { parseTuringCompleteFile, getComponentName, base64ToUint8, uint8ToBase64
 import {runTests} from "./tests/tests"
 import {getDemoCircuits} from "./tests/demoCircuits"
 import {Settings, settings} from "./settings"
+import { DrawContext } from './draw';
 
 (window as any).TuringGoesBrrr.settings = new Settings(reDrawCircuit);
+let drawContext = new DrawContext();
+drawContext.drawBackground();
 
 const TURINGCOMPLETE_SAVE_KEY = "turingcompletegamesave";
 
@@ -34,7 +37,8 @@ function handleTC(circuitData){
     
     // load & draw new
     let circuit = parseTuringCompleteFile(circuitData);
-    drawCircuit(circuit);
+    drawContext.circuit = circuit;
+    drawContext.fitAllOnScreen();
 
     // log & save new
     debugLog("Loaded Circuit!");
@@ -42,64 +46,8 @@ function handleTC(circuitData){
     window.localStorage.setItem(TURINGCOMPLETE_SAVE_KEY, uint8ToBase64(circuitData));
 }
 
-function drawCircuit(circuit: Circuit, canvas: HTMLCanvasElement = document.getElementById("myCanvas") as HTMLCanvasElement){
-    var ctx = canvas.getContext("2d");
-
-    ctx.canvas.width  = window.innerWidth * 0.9;
-    ctx.canvas.height = window.innerHeight - 100;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = settings().backgroundColour;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    let scale = 10;
-    let xOffset = 150;
-    let yOffset = 250;
-
-    function drawComponent(component: Component){
-        ctx.strokeStyle = "black";
-        ctx.beginPath();
-        ctx.arc(component.position.x * scale + xOffset, component.position.y * scale + yOffset, 10, 0, 2 * Math.PI);
-        ctx.stroke();
-
-        ctx.strokeStyle = "magenta";
-        ctx.fillStyle = "magenta";
-        ctx.font = "15px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(getComponentName(component.kind), component.position.x * scale + xOffset, component.position.y * scale + yOffset + 5);
-    }
-
-    circuit.components.forEach(drawComponent);
-
-    function drawWire(wire: Wire){
-        ctx.strokeStyle = settings().wireColourPalette[wire.color];
-
-        ctx.beginPath();
-        
-        ctx.moveTo(wire.path[0].x * scale + xOffset, wire.path[0].y * scale + yOffset);
-        let skip = true;
-        wire.path.forEach(point => {
-            if (!skip){
-                ctx.lineTo(point.x * scale + xOffset, point.y * scale + yOffset);
-            } else {
-                skip = false;
-            }
-        });
-        ctx.stroke();
-        
-
-        wire.path.forEach(point => {
-            ctx.beginPath();
-            ctx.arc(point.x * scale + xOffset, point.y * scale + yOffset, 3, 0, 2 * Math.PI);
-            ctx.stroke();
-        });
-    }
-
-    circuit.wires.forEach(drawWire);
-}
-
 function downloadCanvasImage() {
+    drawContext.draw(true);
     var c = document.getElementById("myCanvas")  as HTMLCanvasElement;
     var dt = c.toDataURL('image/png');
     this.href = dt.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
@@ -107,9 +55,8 @@ function downloadCanvasImage() {
 document.getElementById("canvasdownloadlink").addEventListener('click', downloadCanvasImage, false);
 
 function clearCanvas(){
-    var c = document.getElementById("myCanvas") as HTMLCanvasElement;
-    var ctx = c.getContext("2d");
-    ctx.clearRect(0, 0, c.width, c.height);
+    drawContext.circuit = undefined;
+    drawContext.drawBackground();
     debugLog("Clearing Circuit!")
     debugLog(window.localStorage.getItem(TURINGCOMPLETE_SAVE_KEY));
     window.localStorage.removeItem(TURINGCOMPLETE_SAVE_KEY);
@@ -139,3 +86,5 @@ document.getElementById("clearCanvasButton").onclick = clearCanvas;
 document.getElementById("runTestsButton").onclick = runTests;
 document.getElementById("loadExampleButton").onclick = loadExample;
 document.getElementById("turingCompleteGameFileInput").onchange = openTCfile;
+
+document.getElementById("fitToScreenButton").onclick = () => drawContext.fitAllOnScreen();

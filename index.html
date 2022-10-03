@@ -14,14 +14,20 @@
     </style>
 </head>
 
+<!-- Import, Export, Edit, Run, About -->
+
 
 <input type="file" id="turingCompleteGameFileInput">
 <a id="canvasdownloadlink" download="circuit.png"><button> Download Image </button></a>
-<button id="clearCanvasButton">Clear</button>
+<button id="clearCanvasButton">Clear</button> <button id="fitToScreenButton">Fit To Screen</button>
 <br><button id="importBase64Button"> Import base64 </button> <button id="exportBase64Button"> Export base64 </button> <br>
 <button id="changeSettingsButton"> Edit Settings </button> <button id="runTestsButton"> Run Unit Tests </button> <button id="loadExampleButton">Load Example Circuit</button>
 
 <br> <canvas id="myCanvas" width="500" height="500"></canvas> <br>
+
+<div id="bottom">
+    
+</div>
 
 <script src="lib/snappyjs.min.js"></script>
 <script>

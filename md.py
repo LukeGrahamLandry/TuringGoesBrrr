@@ -2,9 +2,10 @@
  Description: generates html pages from a folder of markdown files
  Author: LukeGrahamLandry
  License: CC0, https://creativecommons.org/share-your-work/public-domain/cc0/
+ Args: <input directory> <output directory> <add ./README.md: true|false>
 """
 
-import os, markdown
+import os, markdown, sys
 
 template_html = """
 <!DOCTYPE html>
@@ -65,13 +66,9 @@ template_html = """
     </div>
     <br> 
     <a href="/"> TuringGoesBrrr </a> <br> <br>
-    <span style="font-size: 10px">The contents of this page is available under <a href="https://creativecommons.org/licenses/by/4.0/">The Creative Commons Attribution 4.0 International License</a></span>
 </body>
 </html>
 """
-
-output_dir = "dist/c/"
-input_dir = "docs"
 
 def compileMD(from_file, to_file):
     with open(from_file, "r") as f:
@@ -83,28 +80,34 @@ def compileMD(from_file, to_file):
     with open(to_file, "w") as f:
         f.write(full_content)
 
-base_root = None 
-for root, dirs, files in os.walk(input_dir, topdown=True):
-    if base_root is None:
-        base_root = root
+    return html_content
 
-    directory = root.replace(base_root, "")
+def compileDirectory(input_dir, output_dir):
+    base_root = None 
+    for root, dirs, files in os.walk(input_dir, topdown=True):
+        if base_root is None:
+            base_root = root
 
-    for dir in dirs:
-        path = output_dir + directory + "/" + dir
-        if (not os.path.exists(path)):
-            os.mkdir(path)
+        directory = root.replace(base_root, "")
 
-    for filename in files:
-        if filename.split(".")[-1] != "md":
-            continue
+        for dir in dirs:
+            path = output_dir + directory + "/" + dir
+            if (not os.path.exists(path)):
+                os.mkdir(path)
 
-        if len(directory) > 0 and directory[0] == "/":
-            directory = directory[1:]
+        for filename in files:
+            if filename.split(".")[-1] != "md":
+                continue
 
-        out_filename = ".".join(filename.split(".")[:-1]) + ".html"
-        path = output_dir + directory + "/" + out_filename
+            if len(directory) > 0 and directory[0] == "/":
+                directory = directory[1:]
 
-        compileMD(root + "/" + filename, path)
+            out_filename = ".".join(filename.split(".")[:-1]) + ".html"
+            path = output_dir + directory + "/" + out_filename
 
-compileMD("README.md", output_dir + "about.html")
+            compileMD(root + "/" + filename, path)
+
+if __name__ == "__main__":
+    compileDirectory(sys.argv[1], sys.argv[2])
+    if len(sys.argv) > 3 and sys.argv[3].lower() == "true":
+        compileMD("README.md", sys.argv[2] + "readme.html")

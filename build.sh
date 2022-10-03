@@ -13,7 +13,7 @@ mkdir dist/lib
 cd dist/lib
 
 # fetch library for reading Turing Complete game save files
-# git clone "https://github.com/LukeGrahamLandry/save_monger" turingcomplete
+git clone "https://github.com/LukeGrahamLandry/save_monger" turingcomplete
 cd turingcomplete
 nim js -d:release --hints:off save_monger.nim 
 mv save_monger.js ../save_monger.js
@@ -34,11 +34,11 @@ curl "https://raw.githubusercontent.com/MegaIng/turing-complete-interface/7f79ca
 # compile main ts code
 cd $cwd
 npx npx webpack --config webpack.config.js
-echo "/*\n Description: application logic for TuringGoesBrrr \n*/\n" > temp
+echo "/*\n Description: application logic for TuringGoesBrrr \n Source: N/A \n License: All Rights Reserved \n*/\n" > temp
 cat dist/main.js >> temp
 mv temp dist/main.js
 cp index.html dist/index.html
 
 # build markdown pages
 mkdir dist/c
-python3 md.py
+python3 md.py "docs" "dist/c/" true

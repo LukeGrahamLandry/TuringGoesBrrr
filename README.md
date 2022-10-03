@@ -6,14 +6,6 @@
     - render the positions of wires and components 
 - export your circuit as an image (.png)
 
-## globals accessible from console
+## Build
 
-- `TuringGoesBrrr`
-    - `settings`: wire colour pallette, debug mode, etc
-- `SaveMonger` 
-    - `parse_state`: accesses the nim function that parses binary Turing Complete Game save files into a usable object. Note that this does not preform normalization
-    - `state_to_binary`
-    - `component_kinds`: maps component ids to names
-- `SnappyJS`
-    - `uncompress`: used by save_monger
-    - `compress`
+Run `./build.sh` then open `dist/index.html` in a browser. 

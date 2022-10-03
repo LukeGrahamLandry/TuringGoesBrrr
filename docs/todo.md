@@ -11,6 +11,8 @@
         - to structures nbt format or mod that places the blocks for you
     - Turing Complete save format
     - logisim
+    - https://nandgame.com
+    - https://circuitverse.org https://github.com/CircuitVerse/CircuitVerse
     - verilog 
         - turing complete can also export to this? but i think it doesn't do position data so wouldn't be visually the same circuit
     - javascript
@@ -39,3 +41,6 @@
 - when TC lets users define levels, have a way to import them 
     - let people who own the game can just point it at the tc folder and access them all in my program without me sketchily distributing or recrating TC's IP
         - would be good to have a nice UI for exploring these
+- write ups about different the file formats
+    - try to SEO "how to open .circ files", "what is a .circ file", ".circ file extension"
+    - include a technical explanation of the data format as well
