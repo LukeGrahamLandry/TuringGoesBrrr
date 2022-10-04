@@ -1,3 +1,5 @@
+# Simulating the Circuits (DEV LOG 5)
+
 ## Evaluating Circuit Graphs 
 
 each component reads and writes values to a variables dictionary where each entry represents the state of a wire
@@ -18,4 +20,5 @@ distinction between static circuits and those with memory that have to keep tick
 started writing tests for things. run when click a button and log which ones fail
 
 - check that my base64 encode and decode functions are inverses of each other
-  
+
+
