@@ -33,7 +33,7 @@ curl "https://raw.githubusercontent.com/MegaIng/turing-complete-interface/7f79ca
 
 # compile main ts code
 cd $cwd
-npx npx webpack --config webpack.config.js
+npx webpack --config webpack.config.js
 echo "/*\n Description: application logic for TuringGoesBrrr \n Source: N/A \n License: All Rights Reserved \n*/\n" > temp
 cat dist/main.js >> temp
 mv temp dist/main.js

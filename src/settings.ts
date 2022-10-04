@@ -1,4 +1,9 @@
 interface SettingsData {
+    scrollZoomSpeed: number;
+    keyZoomSpeed: number;
+    keyMoveSpeed: number;
+    frameRate: number; // TODO: onChange, update draw.ts interval delay
+    wireAnimationSpeed: number;
     backgroundColour: string | CanvasGradient | CanvasPattern;
     readonly wireColourPalette: string[];
     readonly debug: boolean
@@ -9,7 +14,12 @@ export class Settings {
     default: SettingsData = {
         wireColourPalette: ["orange", "black","black","cyan","black","black","black","purple","black","black","grey","black","black"],
         debug: true,
-        backgroundColour: "#32394c"
+        backgroundColour: "#32394c",
+        wireAnimationSpeed: 1,
+        frameRate: 20, 
+        keyMoveSpeed: 5,
+        keyZoomSpeed: 3,
+        scrollZoomSpeed: 0.5
     };
     active: SettingsData;
     onChange: () => void = () => {};

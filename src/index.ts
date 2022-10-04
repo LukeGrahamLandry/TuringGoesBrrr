@@ -38,7 +38,7 @@ function handleTC(circuitData){
     // load & draw new
     let circuit = parseTuringCompleteFile(circuitData);
     drawContext.circuit = circuit;
-    drawContext.fitAllOnScreen();
+    drawContext.transformToFitOnScreen();
 
     // log & save new
     debugLog("Loaded Circuit!");
@@ -87,4 +87,4 @@ document.getElementById("runTestsButton").onclick = runTests;
 document.getElementById("loadExampleButton").onclick = loadExample;
 document.getElementById("turingCompleteGameFileInput").onchange = openTCfile;
 
-document.getElementById("fitToScreenButton").onclick = () => drawContext.fitAllOnScreen();
+document.getElementById("fitToScreenButton").onclick = () => drawContext.transformToFitOnScreen();
