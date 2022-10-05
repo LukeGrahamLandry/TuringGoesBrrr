@@ -1,15 +1,25 @@
 
-export function parseLogisimFile(fileData: string): Circuit {
-    console.log(fileData);
-    let xml = new DOMParser().parseFromString(fileData,"text/xml");
 
+function isInvalidateLogisimXML(fileData: string){
+
+}
+
+export function parseLogisimFile(fileData: string): Circuit {
+    let xml = new DOMParser().parseFromString(fileData,"text/xml");
+    console.log(xml);
+
+    let message = xml.childNodes[0].textContent.trim();
+    console.log(message);
+    
+    let mainCircuitName = xml.getElementsByTagName("main")[0].attributes.getNamedItem("name").value;
     let circuitsXML = xml.getElementsByTagName("circuit");
-    let circuits: Circuit[] = [];
+    let circuits = {};
     for (let i=0;i<circuitsXML.length;i++){
-        circuits.push(parseLogisimXML(circuitsXML[i]));
+        let name = circuitsXML[i].attributes.getNamedItem("name").value;
+        circuits[name] = parseLogisimXML(circuitsXML[i]);
     }
 
-    return circuits[0];
+    return circuits[mainCircuitName];
 }
 
 function parseLogisimXML(circuitXML: Element): Circuit {
@@ -48,6 +58,9 @@ function parseWire(wireXML: Element): Wire {
 }
 
 function parseComponent(componentXML: Element): Component {
+    let posRaw = componentXML.attributes.getNamedItem("loc").value;
+    let name = componentXML.attributes.getNamedItem("name").value;
+
     return {
         kind: 0,
         position: {x: 0, y: 0}

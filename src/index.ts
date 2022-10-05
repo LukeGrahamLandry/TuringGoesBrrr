@@ -1,16 +1,19 @@
-import { parseTuringCompleteFile, getComponentName, base64ToUint8, uint8ToBase64 } from './format/turingcomplete';
+import { uint8ToBase64 } from './format/turingcomplete';
 import {runTests} from "./tests/tests"
 import {getDemoCircuits} from "./tests/demoCircuits"
 import {Settings, settings} from "./settings"
 import { DrawContext } from './draw';
-import { parseLogisimFile } from './format/logisim';
+import  { CircuitFileFormat } from './format';
 
-enum CircuitFileType {
-    TURING_COMPLETE_GAME="turingcomplete", 
-    LOGISIM="logisim"
+function getVersionHash(): string {
+    return (window as any).TuringGoesBrrr.versionHash;
 }
 
-(window as any).TuringGoesBrrr.settings = new Settings(() => console.log("settings updated"));
+let versionElement = document.getElementById("versionhash") as HTMLAnchorElement;
+versionElement.href = "https://github.com/LukeGrahamLandry/TuringGoesBrrr/commit/" + getVersionHash();
+versionElement.innerText = getVersionHash().slice(0, 7);
+
+(window as any).TuringGoesBrrr.settings = new Settings();
 let drawContext = new DrawContext();
 drawContext.drawBackground();
 
@@ -29,7 +32,7 @@ function openTCfile(){
     var reader = new FileReader();
     reader.onload = function(readerEvt: ProgressEvent<FileReader>) {
         let circuitData = uint8ToBase64(new Uint8Array(readerEvt.target.result as ArrayBuffer));
-        writeLocalStorage(circuitData, CircuitFileType.TURING_COMPLETE_GAME);
+        writeLocalStorage(circuitData, CircuitFileFormat.TURING_COMPLETE_GAME);
         displayFromStorage();
     }
     reader.readAsArrayBuffer(file);
@@ -40,7 +43,7 @@ function openLogisimFile(){
     var reader = new FileReader();
     reader.onload = function(readerEvt: ProgressEvent<FileReader>) {
         let circuitData = readerEvt.target.result as string;
-        writeLocalStorage(circuitData, CircuitFileType.LOGISIM);
+        writeLocalStorage(circuitData, CircuitFileFormat.LOGISIM);
         displayFromStorage();
     }
     reader.readAsText(file);
@@ -54,7 +57,7 @@ function importCircuit(circuit: Circuit){
 }
 
 interface StorageData {
-    circuitType: CircuitFileType,
+    circuitType: string,
     circuitData: string
 }
 
@@ -63,31 +66,22 @@ function readLocalStorage(): Circuit {
     if (storageData == undefined || storageData == null || storageData == "") return blankCircuit();
 
     let data = JSON.parse(storageData) as StorageData;
-    
-    let result;
-    switch (data.circuitType){
-        case CircuitFileType.TURING_COMPLETE_GAME:
-            result = parseTuringCompleteFile(base64ToUint8(data.circuitData));
-            break;
-        case CircuitFileType.LOGISIM:
-            result = parseLogisimFile(data.circuitData);
-            break;
-        default:
-            result = blankCircuit();
-            break;
-    }
 
-    return result;
+    for (let format of CircuitFileFormat.all){
+        if (data.circuitType == format.name) return format.import(data.circuitData);
+    }
+    
+    return blankCircuit();
 }
 
 function displayFromStorage(){
     importCircuit(readLocalStorage());
 }
 
-function writeLocalStorage(circuitData: string, circuitType: CircuitFileType){
+function writeLocalStorage(circuitData: string, circuitType: CircuitFileFormat){
     let data: StorageData = {
         circuitData: circuitData,
-        circuitType: circuitType
+        circuitType: circuitType.name
     }
 
     let storageData = JSON.stringify(data);
@@ -101,7 +95,6 @@ function downloadCanvasImage() {
     var dt = c.toDataURL('image/png');
     this.href = dt.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 };
-document.getElementById("canvasdownloadlink").addEventListener('click', downloadCanvasImage, false);
 
 function clearCanvas(){
     drawContext.circuit = undefined;
@@ -114,7 +107,7 @@ function clearCanvas(){
 function importBase64TC(){
     let encoded = prompt("Paste a base64 encoded Turing Complete circuit save file. ");
     if (encoded == null || encoded == "") return;
-    writeLocalStorage(encoded, CircuitFileType.TURING_COMPLETE_GAME);
+    writeLocalStorage(encoded, CircuitFileFormat.TURING_COMPLETE_GAME);
     displayFromStorage();
 }
 
@@ -124,7 +117,7 @@ function exportBase64TC(){
 }
 
 function loadExample(){
-    writeLocalStorage(getDemoCircuits()[3].circuitData, CircuitFileType.TURING_COMPLETE_GAME);
+    writeLocalStorage(getDemoCircuits()[3].circuitData, CircuitFileFormat.TURING_COMPLETE_GAME);
     displayFromStorage();
 }
 
@@ -135,7 +128,7 @@ document.getElementById("runTestsButton").onclick = runTests;
 document.getElementById("loadExampleButton").onclick = loadExample;
 document.getElementById("turingCompleteGameFileInput").onchange = openTCfile;
 document.getElementById("logisimFileInput").onchange = openLogisimFile;
-
+document.getElementById("canvasdownloadlink").addEventListener('click', downloadCanvasImage);
 document.getElementById("fitToScreenButton").onclick = () => drawContext.transformToFitOnScreen();
 
 function blankCircuit(): Circuit {

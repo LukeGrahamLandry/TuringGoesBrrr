@@ -1,3 +1,6 @@
+# start timer
+SECONDS=0
+
 # install nim if not present. for cloudflare pages
 if ! command -v nim &> /dev/null
 then
@@ -38,6 +41,7 @@ curl "https://raw.githubusercontent.com/MegaIng/turing-complete-interface/7f79ca
 cd $cwd
 npx webpack --config webpack.config.js
 printf "/*\n Description: application logic for TuringGoesBrrr \n Source: N/A \n License: All Rights Reserved \n*/\n" > temp
+printf "window.TuringGoesBrrr.versionHash = \"$(git rev-parse HEAD)\"; \n" >> temp
 cat dist/main.js >> temp
 mv temp dist/main.js
 cp index.html dist/index.html
@@ -45,3 +49,6 @@ cp index.html dist/index.html
 # build markdown pages
 mkdir dist/c
 python3 md.py "docs" "dist/c/" true
+
+# print timer
+printf "\nProject built in $SECONDS seconds. \n"

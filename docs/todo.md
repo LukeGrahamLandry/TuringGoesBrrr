@@ -11,12 +11,14 @@
         - to structures nbt format or mod that places the blocks for you
     - Turing Complete save format
     - logisim
-    - https://nandgame.com
-    - https://circuitverse.org https://github.com/CircuitVerse/CircuitVerse
     - verilog 
         - turing complete can also export to this? but i think it doesn't do position data so wouldn't be visually the same circuit
     - javascript
         - define custom components with a java script function that gets compiled to wasm so it can be sand boxed
+    - https://nandgame.com
+    - https://circuitverse.org https://github.com/CircuitVerse/CircuitVerse
+    - maybe https://sebastian.itch.io/digital-logic-sim and someone forked it so that too perhaps
+    - maybe https://logijs.com/ high on google but small and abandoned 
 - infrastructure for automated tests of your circuits 
     - let me run the same test format for each exported format
         - make a bunch of schematics that get checked every time so i can know i didn't break anything
@@ -44,3 +46,4 @@
 - write ups about different the file formats
     - try to SEO "how to open .circ files", "what is a .circ file", ".circ file extension"
     - include a technical explanation of the data format as well
+- compress tc_components.js 

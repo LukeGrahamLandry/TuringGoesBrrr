@@ -6,13 +6,15 @@ export function getComponentName(value: number): string {
     return (window as any).SaveMonger.component_kinds[value];
 }
 
+// when nim passes signed numbers to js they get padded with 0s so negatives loop around to big positives 
+function fixSign(point){
+    point.x = -(point.x < 2**15 ? point.x : (point.x-(2**16)))
+    point.y = -(point.y < 2**15 ? point.y : (point.y-(2**16)))
+}
+
 export function parseTuringCompleteFile(circuitData: Uint8Array): Circuit {
     let circuit = parse_state(circuitData);
-
-    function fixSign(point){
-        point.x = -(point.x < 2**15 ? point.x : (point.x-(2**16)))
-        point.y = -(point.y < 2**15 ? point.y : (point.y-(2**16)))
-    }
+    
     fixSign(circuit.camera_position);
     circuit.components.forEach(element => {
         fixSign(element.position);

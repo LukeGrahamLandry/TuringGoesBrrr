@@ -10,6 +10,16 @@ module.exports = {
                 mangle: true
             }
         })],
+        splitChunks: {
+          minSize: 0,
+          cacheGroups: {
+            vendor: {
+                  test: /[\\/]node_modules[\\/]/,
+                  name: 'lib/vendor',
+                  chunks: 'all'
+              }
+          }
+        }
     },
   module: {
     rules: [
@@ -24,8 +34,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'main.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-  },
-  devtool: "eval-source-map"
+  }
 };

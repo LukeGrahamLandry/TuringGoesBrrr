@@ -19,7 +19,8 @@ export class DrawContext {
     deltaTime: number = 0;
     updates = 0;
     cumulativeTime = 0;
-    fps = "calculating"
+    fps = "calculating";
+    renderIntervalId;
 
     constructor (canvas: HTMLCanvasElement = document.getElementById(defaultCanvasId) as HTMLCanvasElement){
         this.canvas = canvas;
@@ -28,18 +29,25 @@ export class DrawContext {
         canvas.addEventListener("wheel", (e) => this.onScroll(e));
         canvas.addEventListener("mousemove", (e) => this.onMouseMove(e));
         window.addEventListener('keyup', (e) => this.onKeyUp(e));
-        window.addEventListener('keydown', (e) => this.onKeyDown(e)); 
-        canvas.width  = window.innerWidth * 0.9;
-        canvas.height = window.innerHeight - 100;
-        setInterval(() => this.draw(), 1000 / settings().frameRate);
+        window.addEventListener('keydown', (e) => this.onKeyDown(e));
+        this.onSettingsChanged();
         setResizeHandler(() => this.onResize(), 100);
         this.onResize();
         canvas.style.cursor = "grab";
+        (window as any).TuringGoesBrrr.settings.addChangeListener(() => this.onSettingsChanged());
+    }
+
+    onSettingsChanged(){
+        if (this.renderIntervalId != undefined){
+            clearInterval(this.renderIntervalId);
+        }
+
+        this.renderIntervalId = setInterval(() => this.draw(), 1000 / settings().frameRate);
     }
 
     onResize(){
         this.canvas.width  = window.innerWidth * 0.9;
-        this.canvas.height = window.innerHeight - 100;
+        this.canvas.height = window.innerHeight - 120;
     }
 
     onKeyDown(e: KeyboardEvent) {
@@ -114,7 +122,7 @@ export class DrawContext {
         this.updates++;
         this.cumulativeTime += this.deltaTime;
 
-        this.handlePanCanvas();
+        this.handleKeyPresses();
         this.drawBackground();
        
         this.circuit.wires.forEach((e) => this.drawWire(e));
@@ -150,7 +158,7 @@ export class DrawContext {
     }
 
     // todo: should base it off delta time since last frame instead of target frame rate incase you're lagging
-    handlePanCanvas() {
+    handleKeyPresses() {
         if (this.pressedKeys["KeyA"]) this.offset.x += settings().keyMoveSpeed * this.deltaTime / this.scale * 100;
         if (this.pressedKeys["KeyD"]) this.offset.x -= settings().keyMoveSpeed * this.deltaTime / this.scale * 100;
         if (this.pressedKeys["KeyW"]) this.offset.y += settings().keyMoveSpeed * this.deltaTime / this.scale * 100;

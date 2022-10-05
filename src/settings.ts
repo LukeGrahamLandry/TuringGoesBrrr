@@ -22,17 +22,20 @@ export class Settings {
         scrollZoomSpeed: 0.5
     };
     active: SettingsData;
-    onChange: () => void = () => {};
+    onChange: (() => void)[] = [];
 
-    constructor (onChange: () => void){
+    constructor (){
         this.active = this.default;
         this.loadFromStorage();
         document.getElementById("changeSettingsButton").onclick = () => this.queryUserEdit();
-        this.onChange = onChange;
     }
 
     public get(): SettingsData {
         return this.active;
+    }
+
+    public addChangeListener(changeListener: () => void){
+        this.onChange.push(changeListener);
     }
 
     private load(encoded: string): boolean {
@@ -42,7 +45,10 @@ export class Settings {
         if (valid){
             this.active = newSettings;
             window.localStorage.setItem(this.storageKey, JSON.stringify(this.active));
-            this.onChange();
+
+            for (let changeListener of this.onChange){
+                changeListener();
+            }
         } 
         return valid;
     }

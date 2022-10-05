@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title> TuringGoesBrrr </title>
     <style>
@@ -13,44 +15,49 @@
         }
     </style>
 </head>
+<body>
+    <!-- Import, Export, Edit, Run, About -->
 
-<!-- Import, Export, Edit, Run, About -->
+    <input type="file" id="turingCompleteGameFileInput"> <input type="file" id="logisimFileInput"> <br>
+    <a id="canvasdownloadlink" download="circuit.png"><button> Download Image </button></a>
+    <button id="clearCanvasButton">Clear</button> <button id="fitToScreenButton">Fit To Screen</button>
+    <br><button id="importBase64Button"> Import base64 </button> <button id="exportBase64Button"> Export base64 </button> <br>
+    <button id="changeSettingsButton"> Edit Settings </button> <button id="runTestsButton"> Run Unit Tests </button> <button id="loadExampleButton">Load Example Circuit</button>
 
+    <br> <canvas id="myCanvas" width="500" height="500"></canvas> <br>
 
-<input type="file" id="turingCompleteGameFileInput"> <input type="file" id="logisimFileInput"> <br>
-<a id="canvasdownloadlink" download="circuit.png"><button> Download Image </button></a>
-<button id="clearCanvasButton">Clear</button> <button id="fitToScreenButton">Fit To Screen</button>
-<br><button id="importBase64Button"> Import base64 </button> <button id="exportBase64Button"> Export base64 </button> <br>
-<button id="changeSettingsButton"> Edit Settings </button> <button id="runTestsButton"> Run Unit Tests </button> <button id="loadExampleButton">Load Example Circuit</button>
+    <div id="bottom">
+        
+    </div>
+    <div style="position: absolute; bottom: 5px; right: 5px">
+        <a href="" id="versionhash" target="_blank" style="color: white;"></a>
+    </div>
 
-<br> <canvas id="myCanvas" width="500" height="500"></canvas> <br>
+    <script src="lib/snappyjs.min.js"></script>
+    <script>
+        function compress(input){
+            return SnappyJS.compress(new Uint8Array(input));
+        }
+        function uncompress(input){
+            return SnappyJS.uncompress(new Uint8Array(input), Number.MAX_SAFE_INTEGER);
+        }
 
-<div id="bottom">
-    
-</div>
-
-<script src="lib/snappyjs.min.js"></script>
-<script>
-    function compress(input){
-        return SnappyJS.compress(new Uint8Array(input));
-    }
-    function uncompress(input){
-        return SnappyJS.uncompress(new Uint8Array(input), Number.MAX_SAFE_INTEGER);
-    }
-
-    window.SaveMonger = {
-        component_kinds: {}
-    };
-    window.TuringGoesBrrr = {}
-</script>
-<script src="lib/tc_components.js"></script>
-<script src="lib/save_monger.min.js"></script>
-<script>
-    let inverted = {}
-    for (name in window.SaveMonger.component_kinds){
-        let value = window.SaveMonger.component_kinds[name];
-        inverted[value] = name;
-    }
-    window.SaveMonger.component_kinds = inverted;
-</script>
-<script src="main.js"></script>
+        window.SaveMonger = {
+            component_kinds: {}
+        };
+        window.TuringGoesBrrr = {}
+    </script>
+    <script src="lib/tc_components.js"></script>
+    <script src="lib/save_monger.min.js"></script>
+    <script>
+        let inverted = {}
+        for (name in window.SaveMonger.component_kinds){
+            let value = window.SaveMonger.component_kinds[name];
+            inverted[value] = name;
+        }
+        window.SaveMonger.component_kinds = inverted;
+    </script>
+    <script src="lib/vendor.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

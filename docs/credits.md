@@ -12,7 +12,7 @@ save_monger uses suppersnappy ([License: MIT](https://github.com/Stuffe/save_mon
 
 ## logisim
 
-[Logisim](http://www.cburch.com/logisim/) (or the maintained version, [Logisim Evolution](https://github.com/logisim-evolution/logisim-evolution)) is a program for designing and simulating digital logic circuits. It's GPL so i don't want to commit to using any of their code but its a giant pile of java classes that i couldn't use in this context anyway. So I'm just manually going through the XML of some .circ files it generates to figure out how to import them. They represent wires and components very similarly to Turing Complete just as XML instead of a custom binary thing. 
+[Logisim](http://www.cburch.com/logisim/) (or the maintained version, [Logisim Evolution](https://github.com/logisim-evolution/logisim-evolution)) is a program for designing and simulating digital logic circuits. Their .circ files are just XML that I can manually parse.
 
 ## build tools
 

@@ -10,18 +10,19 @@ so these are what i did to get the library to compile but im just going to write
 
 ### Bundle
 
-this part of webpack.config.js lets me split all my npm packages into vendor.js and keep my code separate in main.js
+this part of webpack.config.js lets me split all my npm packages into lib/vendor.js and keep my code separate in main.js
 
 ```javascript
 {
     // ...
     optimization: {
         // ...
+        minSize: 0,
         splitChunks: {
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'vendor',
+                    name: 'lib/vendor',
                     chunks: 'all'
                 }
             }
@@ -65,6 +66,7 @@ would have to fork it at some point
 logisim .circ files are just XML structured as follows
 
 ```
+main name="main"
 circuit name="main"
     - comp loc="(x, y)" name="Gate Type"
     - comp loc="(x, y)" name="Gate Type"
@@ -75,7 +77,6 @@ circuit name="main"
 There's a bunch of extra info about your GUI settings as well that i don't care about right now. 
 
 ```
-- main name="main": which circuit to show on import i assume
 - toolbar: a list of different tools and components you placed recently
 - mappings: kind binds to tools 
 - lib[]: associates names of groups with numbers that are referenced in lib attribute of components and tools
@@ -87,6 +88,12 @@ There's a bunch of extra info about your GUI settings as well that i don't care 
 
 ## wires
 
+from and to positions as attributes on the tag
 
 ## components
 
+position and name of component as attributes on the tag
+
+## Display Site Version
+
+using `git rev-parse HEAD` to get the hash of the last commit and displaying that on the website so you can see what version is running. 
