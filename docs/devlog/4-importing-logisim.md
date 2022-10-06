@@ -2,15 +2,15 @@
 
 ## Library attempt
 
-found on npm: https://github.com/DLii-Technologies/logisim-emulator
+October 4
 
-but i really dont think theres any point cause its kinda just a wrapper of an xml parser.
-after messing with the library a bit i looked at a .circ and i can interpret whats going on pretty easily i think
-so these are what i did to get the library to compile but im just going to write it myself
+I found something on npm that claims to parse and simulate logisim .circ files: https://github.com/DLii-Technologies/logisim-emulator  
 
-### Bundle
+But I kinda want to write the simulation part myself for fun and it turns out .circ files are just xml that I can parse myself fairly easily. So I wasted some time getting the library to run in my environment but I won't be using it. 
 
-this part of webpack.config.js lets me split all my npm packages into lib/vendor.js and keep my code separate in main.js
+### Bundle Splitting 
+
+I don't like that the giant npm package gets bundled into the same main.js as my code. This part of webpack.config.js lets me split all my npm packages into lib/vendor.js and keep my code separate.
 
 ```javascript
 {
@@ -38,9 +38,7 @@ this part of webpack.config.js lets me split all my npm packages into lib/vendor
 
 ### polyfills 
 
-trying to webpack build gives a bunch of errors that i think are like it saying theres specific packages that browsers sometimes provide that i have to explicitly give it permission 
-https://webpack.js.org/guides/shimming/
-for each error i npm install and add to webpack
+Polyfills let you add code to reimplement node apis or newer browser apis when running on older browsers. When trying to build the project, webpack gives me a bunch of errors for node apis that would be missing and offers that i could add polyfills to replace them. Just have to npm install something and then tell webpack which package maps to each missing api.
 
 ```javascript
 resolve: {
@@ -55,15 +53,29 @@ resolve: {
   },
 ```
 
+### Uncaught ReferenceError: process is not defined
+
+The package is expecting to be run in node.js which gives you a `process` object with some environment variables (doesn't exist in the browser). Webpack can export values for any that it tries to reference. 
+
+```javascript
+const webpack = require('webpack');
+// ...
+plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
+],
+```
+
 ### missing package
 
-it depends on `fs` from npm which doesn't exist anymore.
-so i went into `logisim-emulator/dist/parser/index.js` and deleted the part that calls that because i can read the files myself. that package was only meaningful for node where it could access the file system anyway
-would have to fork it at some point
+The package depends on `fs` from npm which doesn't exist anymore, it's npm page is just "Security holding package". 
+
+It seems like `fs` just helped you interact with the file system from node.js but since I want it to run in the browser I'd have to do that differently anyway. So I went into `logisim-emulator/dist/parser/index.js` and deleted the `require(fs)` and methods that read files for you (leaving the one that just parses an xml string). I'd have to fork `logisim-emulator` to keep these changes. 
 
 ## Parsing XML
 
-logisim .circ files are just XML structured as follows
+logisim .circ files are just XML structured as follows.
 
 ```
 main name="main"
@@ -93,6 +105,14 @@ from and to positions as attributes on the tag
 ## components
 
 position and name of component as attributes on the tag
+
+## Refactor Files UI Code
+
+Now that I support multiple file formats it makes sense to generify some of the UI code for importing and saving to local storage.   
+
+define a class for file formats 
+that knows extensions and has a method that maps a data string to a circuit object
+
 
 ## Display Site Version
 

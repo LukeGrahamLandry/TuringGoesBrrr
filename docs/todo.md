@@ -15,10 +15,19 @@
         - turing complete can also export to this? but i think it doesn't do position data so wouldn't be visually the same circuit
     - javascript
         - define custom components with a java script function that gets compiled to wasm so it can be sand boxed
+    - .tgb json dump of my data structure 
     - https://nandgame.com
     - https://circuitverse.org https://github.com/CircuitVerse/CircuitVerse
     - maybe https://sebastian.itch.io/digital-logic-sim and someone forked it so that too perhaps
-    - maybe https://logijs.com/ high on google but small and abandoned 
+    - https://github.com/tilk/digitaljs https://digitaljs.tilk.eu/
+        - json format for circuits and simulates in js
+        - https://github.com/tilk/yosys2digitaljs converts verilog to that json format. api not frontend 
+        - uses https://github.com/YosysHQ/yosys which turns verilog into physical positions of components 
+        - but wasm version exists https://www.npmjs.com/package/yosys so i can fork yosys2digitaljs to use that
+            - can get it as 6mb of js https://unpkg.com/yosys@0.10.5/dist/yosys.js
+            - so i'd have to figure out how to load conditionally, only if they want to use the verilog feature
+        - so flow would be verilog code -> (yosys2digitaljs, yosys.js) -> digitaljs json -> (my code) -> circuit object 
+        - then instead of writing something that understands verilog i just have to import another circuit layout format 
 - infrastructure for automated tests of your circuits 
     - let me run the same test format for each exported format
         - make a bunch of schematics that get checked every time so i can know i didn't break anything
@@ -47,3 +56,16 @@
     - try to SEO "how to open .circ files", "what is a .circ file", ".circ file extension"
     - include a technical explanation of the data format as well
 - compress tc_components.js 
+- tools for teachers like https://circuitverse.org/teachers
+- undo & redo 
+- figure out how to load js dynamically so you can only load the parsing for the file formats you want 
+
+```javascript
+let fileFormatModules = {
+    turingcomplete: ["snappyjs.min.js", "save_monger.min.js", "tc_components.js"],
+    verilog: ["yosys.js", "yosys2digitaljs.js"]
+}
+
+// triggers loading animation and waits until all files are downloaded to continue
+requireModule("turingcomplete")
+```

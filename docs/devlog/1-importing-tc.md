@@ -1,5 +1,7 @@
 # Importing Save Files from turingcomplete.game (DEV LOG 1)
 
+September 28
+
 ## Nim
 
 ```
@@ -9,13 +11,27 @@ export PATH=~/.nimble/bin:$PATH
 
 save parsing lib is written in lang that compiles to js
 
-### compression lib
+```
+nim js -d:release --hints:off save_monger.nim 
+```
 
-cant use c memory access functions so compression library doesnt work
-so just delete it all and have the function definitions to fill in from java script with another impl of that lib
+If I load that output from a script tag, the library's functions are just defined globally so I can access `parse_state` from my other JavaScript code.
 
-just importing that library and then have a script that where i globally define the compress & uncompress functions the nim code expects. in nim i just write the function header and use the `{.importc.}` schema to tell it that the function will be provided by javascript
+### Snap Compression Library
 
+The suppersnappy compression library wants to use low level memory manipulation but Nim only defines those functions on the c backend (not the js ones). So I deleted the bodies of the compress and uncompress method, just leaving the function header and use the `{.importc.}` schema to tell it that the function will be provided by javascript. 
+
+Then in the html file I import [snappyjs](https://github.com/zhipeng-jia/snappyjs) which implements the same compression system. It doesn't give the functions the same signature nim expects. They're in the `SnappyJS` namespace, `uncompress` wants you to pass a max size, and O need to wrap the values from Nim to make a `Uint8Array`. So instead of changing the Nim code, I have a script tag that globally defines the methods Nim expects and wraps the `SnappyJS` method calls. 
+
+```javascript
+function compress(input){
+    return SnappyJS.compress(new Uint8Array(input));
+}
+
+function uncompress(input){
+    return SnappyJS.uncompress(new Uint8Array(input), Number.MAX_SAFE_INTEGER);
+}
+```
 
 ### problems with binary numbers
 nim's signed numbers use twos complement for negatives but when passed to javascript its interpreted as a normal number

@@ -141,3 +141,8 @@ export function checkEvalCircuit(){
     console.log(orGateFunction([true, false]))
 }
 
+
+
+// want two versions
+// simulate: need to know the state of every wire so i can render it
+// compile: convert it to an equivalent js function that can be more performant 

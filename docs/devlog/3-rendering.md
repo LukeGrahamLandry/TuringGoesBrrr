@@ -1,11 +1,15 @@
 # Improving Circuit Rendering Canvas (DEV LOG 3)
 
+October 3
+
+I'm working on making my circuit rendering in the canvas more interactive. 
+
 ### key binds
 
 There's no way to check which keys are currently held down so i listen for up and down events and save the current state of each key in a map.  
 same for mouse
 
-### rendering
+### drawing
 
 keep track of a zoom number and an offset x,y to use when rendering a circuit
 scale the size of text and circles and lines based on the zoom 
@@ -76,7 +80,18 @@ i do this automatically when you import a file so you can actually see it
 todo
 make sure the whole rendering of the component and pins fit, not just one corner of it
 
-### settings 
+### Component Name Map
 
-a bunch of constants for the speeds of every s 
+In save_monger I can export the `component_kind` enum so I can access the names for each component ID number from JavaScript and render those strings to make debugging easier once I get to simulating the circuits. 
 
+```nim
+for kind in component_kind:
+  SaveMonger.component_kinds[$kind] = kind
+```
+
+## Cloudflare 
+
+- Use `printf` instead of `echo` because it was escaping the line breaks in my license headers. 
+- Couldn't figure out how to pass options when piping `curl choosenim` directly to bash. Instead, save it to a file, `chmod` it to be executable, and run passing `-y` to accept defaults. 
+
+After those changes it worked perfectly just pointing it at my github repo. 

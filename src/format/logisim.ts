@@ -1,9 +1,3 @@
-
-
-function isInvalidateLogisimXML(fileData: string){
-
-}
-
 export function parseLogisimFile(fileData: string): Circuit {
     let xml = new DOMParser().parseFromString(fileData,"text/xml");
     console.log(xml);
