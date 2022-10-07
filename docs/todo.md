@@ -58,6 +58,8 @@
 - compress tc_components.js 
 - tools for teachers like https://circuitverse.org/teachers
 - undo & redo 
+- i can overlay html on the canvas and drag it around like circuitverse does http://jsfiddle.net/f5EMT/1/
+- drop a file on the canvas to open it based on extension https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 - figure out how to load js dynamically so you can only load the parsing for the file formats you want 
 
 ```javascript

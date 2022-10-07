@@ -4,6 +4,7 @@ import {getDemoCircuits} from "./tests/demoCircuits"
 import {Settings, settings} from "./settings"
 import { DrawContext } from './draw';
 import  { CircuitFileFormat } from './format';
+import { initProgressiveWebApp } from "./offline"
 
 function getVersionHash(): string {
     return (window as any).TuringGoesBrrr.versionHash;
@@ -139,3 +140,4 @@ function blankCircuit(): Circuit {
     };
 }
 
+initProgressiveWebApp();

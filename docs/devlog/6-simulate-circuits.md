@@ -1,4 +1,4 @@
-# Simulating the Circuits (DEV LOG 5)
+# Simulating the Circuits (DEV LOG 6)
 
 ## Evaluating Circuit Graphs 
 

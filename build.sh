@@ -44,11 +44,13 @@ printf "/*\n Description: application logic for TuringGoesBrrr \n Source: N/A \n
 printf "window.TuringGoesBrrr.versionHash = \"$(git rev-parse HEAD)\"; \n" >> temp
 cat dist/main.js >> temp
 mv temp dist/main.js
-cp index.html dist/index.html
+
+# copy static files for distribuiton 
+cp -r static/* dist
 
 # build markdown pages
 mkdir dist/c
-python3 md.py "docs" "dist/c/" true
+python3 md.py "docs" "dist/c" "https://github.com/LukeGrahamLandry/TuringGoesBrrr/commits/main" true 
 
 # print timer
 printf "\nProject built in $SECONDS seconds. \n"
