@@ -49,8 +49,7 @@ mv temp dist/main.js
 cp -r static/* dist
 
 # build markdown pages
-mkdir dist/c
-python3 md.py "docs" "dist/c" "https://github.com/LukeGrahamLandry/TuringGoesBrrr/commits/main" true 
+python3 md.py "docs" "dist" "https://github.com/LukeGrahamLandry/TuringGoesBrrr/blob/main" true 
 
 # print timer
 printf "\nProject built in $SECONDS seconds. \n"

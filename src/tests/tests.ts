@@ -1,5 +1,5 @@
 import { getDemoCircuits, TuringCircuitTestCase } from "./demoCircuits";
-import { parseTuringCompleteFile, base64ToUint8, uint8ToBase64 } from "../format/turingcomplete";
+import { parseTuringCompleteFile, base64ToUint8, uint8ToBase64 } from "../format/import/turingcomplete";
 
 export function runTests(){
     let demoCircuits = getDemoCircuits();

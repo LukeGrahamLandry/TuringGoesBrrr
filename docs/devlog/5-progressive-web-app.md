@@ -8,9 +8,18 @@ Since all the work is done on the frontend, I can allow using the site offline. 
 
 - https://web.dev/offline-fallback-page
 
+### load Event
+
+Fires on the main thread when the page is loaded and lets you register a JavaScript file to be run in the background as a service worker. 
+
+```javascript
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js", {scope: '/'});
+}
+```
 ### install Event
 
-Runs the first time the service worker gets setup (not when they press the install button). 
+Fires on the worker's thread the first time the service worker gets setup (not when they press the install button). 
 
 triggered by incrementing the magic variable `OFFLINE_VERSION`.
 
@@ -31,7 +40,7 @@ self.skipWaiting();
 
 ### fetch Event
 
-triggered whenever one of the site's files is fetched 
+Fires on the worker's thread whenever one of the site's files is fetched 
 
 wrap the `fetch` call so if we get an error (because they're offline), we can return the file from the cache instead. 
 

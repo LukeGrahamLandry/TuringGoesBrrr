@@ -1,2 +1,100 @@
-Welcome to TuringGoesBrrr. <br>
-<a href="/circuit"> Launch App </a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> TuringGoesBrrr | Logic Circuit Simulator </title>
+    <!-- The install button won't show until the first time they open /circuit and start the service worker because I don't want to download all the js until they need it -->
+    <link rel="manifest" href="/app.webmanifest"/>
+    <link rel="canonical" href="https:/turinggoesbrrr.com">
+    <style>
+        .nav {
+            border: 2px solid black;
+            padding: 10px;
+        }
+
+        div {
+            text-align: left;
+            display: inline-block;
+        }
+
+        .nav li {
+            margin-right: 10px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            text-align: center;
+        }
+
+        a {
+            color: #0366d6
+        }
+
+        a:hover {
+            color: green;
+        }
+
+        .content {
+            max-width: 600px;
+            font-size: 1.33rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>TuringGoesBrrr</h1>
+    <a href="/circuit" style="font-size: 5rem"> Open Circuit Simulation </a>
+
+    <br> <br>
+    <div class="content">
+        TuringGoesBrrr is an online logic circuit simulator. 
+        Combine simple logic gates to form complex circuits and investigate their emergent behaviour. 
+        Import circuits from Logisim files (.circ) and Turing Complete game saves. 
+        A progressive web app is available for offline use. 
+    </div>
+    <br><br>
+    <div class="nav">
+        <ul>
+            <li><a href="/todo"> Road Map </a></li>
+            <li><a href="/credits"> Credits </a></li>
+            <li>
+                File Format Documentation 
+                <ul>
+                    <li><a href="/format/turing-complete">Turing Complete Game (.data)</a></li>
+                    <li><a href="/format/logisim">Logisim (.circ)</a></li>
+                </ul>
+            </li>
+            <li>
+                Dev Logs
+                <ol>
+                    <li><a href="/devlog/1-importing-tc"> Importing Turing Complete Save Files </a></li>
+                    <li><a href="/devlog/2-webpack"> Building the TypeScript Project with Webpack </a></li>
+                    <li><a href="/devlog/3-rendering"> Improving Circuit Rendering Canvas </a></li>
+                    <li><a href="/devlog/4-importing-logisim"> Importing .circ Files from Logisim </a></li>
+                    <li><a href="/devlog/5-progressive-web-app"> Creating a Progressive Web App </a></li>
+                </ol>
+            </li>
+            <!--
+            <li>
+                Computing Progression 
+                <ol>
+                    <li><a href="">Fundamental Logic Gates</a></li>
+                    <li><a href="">Arithmetic</a></li>
+                    <li><a href="">Memory</a></li>
+                </ol>
+            </li>
+            <li>
+                <a href="">Conway's Game of Life </a>
+            </li>
+            <li>
+                <a href="">Esolang Interpreters </a>
+                <ol>
+                    <li><a href="">Brainfuck</a></li>
+                    <li><a href="">Chef</a></li>
+                    <li><a href="">Shakespeare</a></li>
+                </ol>
+            </li>
+            -->
+            
+        </ul>
+    </div>
+</body>
+</html>

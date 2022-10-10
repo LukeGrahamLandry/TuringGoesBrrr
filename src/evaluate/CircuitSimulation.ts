@@ -1,17 +1,25 @@
-// like an adjacency list generated from the tc save
-// start with the static input components and add their connections in order
-// no obligation that the action be a pure function
+import { parseCircuitToGraph, WireLabel, ExecutableCircuit } from "../format/export/ExecutableCircuit";
 
-type ExecutableCircuit = Array<ExecutionNode>;
-type WireLabel = number | string;
+type VariableStore = Map<WireLabel, WireData>
 
-interface ExecutionNode {
-    in: Array<WireLabel>,
-    out: Array<WireLabel>,
-    action(data: WireData[]): WireData[]
+export class CircuitSimulation {
+    circuit: Circuit; 
+    circuitGraph: ExecutableCircuit;
+    variables: VariableStore = new Map();
+
+    constructor(circuit: Circuit){
+        this.circuit = circuit;
+        this.circuitGraph = parseCircuitToGraph(this.circuit);
+    }
+
+    public tick(){
+
+    }
 }
 
-type VariableStore = Map<WireLabel, WireData> // todo: refactor to use this
+
+
+//////////////////////////////////////////////////////////////////////////
 
 let circuit: ExecutableCircuit = [
     {
@@ -28,6 +36,46 @@ let circuit: ExecutableCircuit = [
         in: [1, 2],
         out: ["output"],
         action: (data) => [data[0] || data[1]]
+    }, 
+    {
+        in: ["output"],
+        out: [],
+        action: (a) => undefined
+    }
+]
+
+function nandAction(input: WireData[]): WireData[]{
+    return [!(input[0] && input[1])];
+}
+
+let NOT: ExecutableCircuit = [
+    {
+        in: ["in0"],
+        out: [1],
+        action: (data) => data
+    },
+    {
+        in: [1, 2],
+        out: ["output"],
+        action: nandAction
+    }, 
+    {
+        in: ["output"],
+        out: [],
+        action: (a) => undefined
+    }
+]
+
+let NESTED_NOT: ExecutableCircuit = [
+    {
+        in: ["in0"],
+        out: [1],
+        action: (data) => data
+    },
+    {
+        in: [1, 2],
+        out: ["output"],
+        action: circuitToAction(NOT)
     }, 
     {
         in: ["output"],
@@ -87,6 +135,25 @@ export function evaluateCircuit(circuit, parentInputData){
     return variables;
 }
 
+type CircuitAction = (data: WireData[]) => WireData[];
+
+// converts a circuit to an action that may be used as a component in other circuits
+function circuitToAction(circuit: ExecutableCircuit): CircuitAction {
+    // collect all output components
+    let names = [];
+    for (let component of circuit){
+        if (component.out.length == 0){
+            names = [...names, ...component.in];
+        }
+    }
+
+    // wrap and return those values
+    let circ = wrapCircuit(circuit, names);
+    return (input: WireData[]) => {
+        return circ(input);
+    }
+}
+
 // compiles a circuit to a javascript functions
 // outputVariableNames are the circuit variables whose value the js function will output (as an array)
 function wrapCircuit(circuit, outputVariableNames){
@@ -141,8 +208,3 @@ export function checkEvalCircuit(){
     console.log(orGateFunction([true, false]))
 }
 
-
-
-// want two versions
-// simulate: need to know the state of every wire so i can render it
-// compile: convert it to an equivalent js function that can be more performant 

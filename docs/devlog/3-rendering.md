@@ -2,7 +2,7 @@
 
 October 3
 
-I'm working on making my circuit rendering in the canvas more interactive. 
+I'm working on making my circuit rendering in the canvas more interactive. Most of this behaviour is in `DrawContext` with the circuit specific animation/drawing code split off into `CircuitDrawContext` so I can reuse the same event handling and render transformation logic for later canvas based stuff. 
 
 ### key binds
 

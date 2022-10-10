@@ -1,11 +1,12 @@
-import { parseTuringCompleteFile, base64ToUint8 } from './turingcomplete';
-import { parseLogisimFile } from "./logisim"
+import { parseTuringCompleteFile, base64ToUint8 } from './import/turingcomplete';
+import { parseLogisimFile } from "./import/logisim"
 
 
 enum DataFormat {
     BASE_64,
     XML,
-    JSON
+    JSON,
+    CODE
 }
 
 export class CircuitFileFormat {
@@ -30,7 +31,7 @@ export class CircuitFileFormat {
     });
 
     constructor(options){
-        this.import = options.import;
+        if (options.import != undefined) this.import = options.import;
         this.name = options.name;
         this.extensions = options.extensions;
         this.dataFormat = options.dataFormat;
@@ -38,6 +39,10 @@ export class CircuitFileFormat {
     }
 
     public import(circuitData: string): Circuit{
+        throw new Error("Not Implemented");
+    }
+
+    public export(circuit: Circuit): string{
         throw new Error("Not Implemented");
     }
 }

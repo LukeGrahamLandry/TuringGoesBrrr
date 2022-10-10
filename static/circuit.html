@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <title> TuringGoesBrrr </title>
+    <link rel="manifest" href="/app.webmanifest"/>
+    <link rel="canonical" href="https://turinggoesbrrr.com/circuit">
     <style>
         canvas {
             border: 4px solid black;
@@ -14,9 +16,14 @@
             text-align: center;
         }
     </style>
-    <link rel="manifest" href="/app.webmanifest"/>
 </head>
 <body>
+    <select id="contextSelect">
+        <option value="">Logic Circuit</option>
+        <option value="">Conway's Game of Life</option>
+        <option value="">Esolangs</option>
+    </select>
+
     <!-- Import, Export, Edit, Run, About -->
 
     <input type="file" id="turingCompleteGameFileInput"> <input type="file" id="logisimFileInput"> <br>

@@ -1,8 +1,8 @@
-import { uint8ToBase64 } from './format/turingcomplete';
+import { uint8ToBase64 } from './format/import/turingcomplete';
 import {runTests} from "./tests/tests"
 import {getDemoCircuits} from "./tests/demoCircuits"
 import {Settings, settings} from "./settings"
-import { DrawContext } from './draw';
+import { CircuitDrawContext } from './draw/CircuitDrawContext';
 import  { CircuitFileFormat } from './format';
 import { initProgressiveWebApp } from "./offline"
 
@@ -15,7 +15,7 @@ versionElement.href = "https://github.com/LukeGrahamLandry/TuringGoesBrrr/commit
 versionElement.innerText = getVersionHash().slice(0, 7);
 
 (window as any).TuringGoesBrrr.settings = new Settings();
-let drawContext = new DrawContext();
+let drawContext = new CircuitDrawContext();
 drawContext.drawBackground();
 
 const CIRCUIT_STORAGE_KEY = "circuitdata";
