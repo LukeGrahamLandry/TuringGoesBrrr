@@ -1,4 +1,4 @@
-# Creating a Progressive Web App (DEV LOG 5)
+# Creating a Progressive Web App 
 
 October 6
 
@@ -21,9 +21,9 @@ if ("serviceWorker" in navigator) {
 
 Fires on the worker's thread the first time the service worker gets setup (not when they press the install button). 
 
-triggered by incrementing the magic variable `OFFLINE_VERSION`.
+defines which files should be cached for offline use. The `{ cache: "reload" }` tells it to skip the HTTP cache to make sure it gets the update from the network. I feel like it could still be cached by cloudflare so perhaps it doesn't really achieve anything. 
 
-defines which files should be cached for offline use. The `{ cache: "reload" }` tells it to skip the HTTP cache. 
+The `skipWaiting` call makes forces this version the active service worker for any open pages. If I didn't want to do this I'd also have to change the cache name based on the version because currently loading a new service worker rewrites those files. Might be better to keep that separation so they can't accidentally load js from the wrong version but then I worry about leaving a trail of caches taking up their space. 
  
 
 ```javascript
@@ -38,11 +38,16 @@ event.waitUntil(
 self.skipWaiting();
 ```
 
+Problem: if it fails to fetch any one of the new files, it discards all of them
+
 ### fetch Event
 
 Fires on the worker's thread whenever one of the site's files is fetched 
 
 wrap the `fetch` call so if we get an error (because they're offline), we can return the file from the cache instead. 
+
+
+The `catch` block is only called if an exception is thrown (ex. a network error). If the request gets an HTTP code that indicates an error (ex. 4xx or 5xx), the `catch` block is NOT called. 
 
 ```javascript
 event.respondWith(
@@ -57,15 +62,27 @@ event.respondWith(
 );
 ```
 
+I also flip it so it checks the cache first instead of the network since if anything changed the worker will already have fetched the updated version. Told cloudflare not to cache js files. Consider adding the content hash to the js file names to make sure it doesn't get stored in the http cache.
+
 ### Scope Problem
+
+Wanted to put the worker script in` /pwa/service-worker.js` but then it cant apply to whole site so moved it to `/service-worker.js`.
 
 The path of the provided scope ('/') is not under the max scope allowed ('/pwa/'). Adjust the scope, move the Service Worker script, or use the Service-Worker-Allowed HTTP header to allow the scope.
 
-wanted to put it in /pwa but then it cant apply to whole site
-
 ### Dealing with Cloudflare Redirects
 
-Cloudflare pages forces the following redirects: `/index.html -> /` and `/anything.html -> /anything`. So when I tell it to cache `/index.html`, I can't load it offline because it puts me at `/` and it can't find that in the cache. I can't even manually navigate to `/index.html` offline because it caches the 301. Maybe I could have it cache `/` to reference the root, I'm not sure. My solution was to move the app to `/circuit.html` and tell the service worker to cache `/circuit`. This also opens up the potential for a landing page which I will want at some point anyway. 
+Cloudflare pages forces the following redirects: `/index.html -> /` and `/anything.html -> /anything`. So when I tell it to cache `/index.html`, I can't load it offline because it puts me at `/` and it can't find that in the cache. I can't even manually navigate to `/index.html` offline because it caches the 301. My solution was to move the app to `/circuit.html` and tell the service worker to cache `/circuit`. I could probably have it cache `/` to reference the root but moving the page also opens up the potential for a landing page which I will want at some point anyway. 
+
+### Updating 
+
+- https://web.dev/service-worker-lifecycle
+
+Any change to the service worker script will cause the browser to create a new worker and fire the install event again. So in my build script I append the commit hash to `service-worker.js` so everyone will fetch the new files every time I make a change. 
+
+### Support Preloading Content
+
+- https://web.dev/navigation-preload
 
 ## Manifest 
 

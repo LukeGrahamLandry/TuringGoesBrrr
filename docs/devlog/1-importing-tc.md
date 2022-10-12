@@ -1,4 +1,4 @@
-# Importing Save Files from turingcomplete.game (DEV LOG 1)
+# Importing Save Files from turingcomplete.game
 
 September 28
 

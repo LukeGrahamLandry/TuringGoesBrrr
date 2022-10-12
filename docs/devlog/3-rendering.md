@@ -1,4 +1,4 @@
-# Improving Circuit Rendering Canvas (DEV LOG 3)
+# Improving Circuit Rendering Canvas
 
 October 3
 

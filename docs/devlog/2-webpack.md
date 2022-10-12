@@ -1,4 +1,4 @@
-# Building the TypeScript Project (DEV LOG 2)
+# Building the TypeScript Project
 
 September 30
 

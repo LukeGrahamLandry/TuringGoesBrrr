@@ -42,14 +42,17 @@ cd $cwd
 npx webpack --config webpack.config.js
 printf "/*\n Description: application logic for TuringGoesBrrr \n Source: N/A \n License: All Rights Reserved \n*/\n" > temp
 printf "window.TuringGoesBrrr.versionHash = \"$(git rev-parse HEAD)\"; \n" >> temp
-cat dist/main.js >> temp
-mv temp dist/main.js
+cat dist/circuit.js >> temp
+mv temp dist/circuit.js
 
 # copy static files for distribuiton 
 cp -r static/* dist
 
+# add version to service worker script so browser notices update and cache gets refreshed 
+printf "\nconst COMMIT_HASH = \"$(git rev-parse HEAD)\"; \n" >> dist/service-worker.js
+
 # build markdown pages
-python3 md.py "docs" "dist" "https://github.com/LukeGrahamLandry/TuringGoesBrrr/blob/main" true 
+python3 md.py "docs" "dist" "https://turinggoesbrrr.com" true 
 
 # print timer
 printf "\nProject built in $SECONDS seconds. \n"

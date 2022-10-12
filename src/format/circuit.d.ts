@@ -12,7 +12,7 @@ interface Wire {
 
 interface Component {
     position: Point,
-    kind: number
+    kind: string
 }
 
 interface Point {

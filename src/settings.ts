@@ -2,7 +2,7 @@ interface SettingsData {
     scrollZoomSpeed: number;
     keyZoomSpeed: number;
     keyMoveSpeed: number;
-    frameRate: number; // TODO: onChange, update draw.ts interval delay
+    frameRate: number;
     wireAnimationSpeed: number;
     backgroundColour: string | CanvasGradient | CanvasPattern;
     readonly wireColourPalette: string[];

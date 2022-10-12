@@ -1,4 +1,4 @@
-# Importing .circ Save Files from Logisim (DEV LOG 4)
+# Importing .circ Save Files from Logisim 
 
 ## Library attempt
 
@@ -102,9 +102,15 @@ There's a bunch of extra info about your GUI settings as well that i don't care 
 
 from and to positions as attributes on the tag
 
+the wire bends are precalculated so one wire element is always fully vertical or fully horizontal. 
+
+im dividing all the positions by 10 to get it closer to the scale of turing complete 
+
 ## components
 
 position and name of component as attributes on the tag
+
+todo: the component sizes are much to big so there's gaps between wires and i need to figure out the IO pin positions 
 
 ## Refactor Files UI Code
 

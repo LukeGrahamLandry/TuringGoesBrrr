@@ -1,4 +1,3 @@
-import { getComponentName } from "../format/import/turingcomplete";
 import { settings } from "../settings";
 import { DrawContext } from './DrawContext';
 import { CircuitSimulation } from "../evaluate/CircuitSimulation"
@@ -58,7 +57,7 @@ export class CircuitDrawContext extends DrawContext {
         this.ctx.fillStyle = "magenta";
         this.ctx.font = (this.scale * 1) + "px Arial";
         this.ctx.textAlign = "center";
-        this.ctx.fillText(getComponentName(component.kind), pos.x, pos.y);
+        this.ctx.fillText(component.kind, pos.x, pos.y);
     }
 
     // draw a line from each point to the next

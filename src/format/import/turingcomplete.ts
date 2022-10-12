@@ -1,4 +1,4 @@
-function parse_state(data: Uint8Array): Circuit {
+function parse_state(data: Uint8Array) {
     return (window as any).SaveMonger.parse_state(data);
 }
 
@@ -18,6 +18,7 @@ export function parseTuringCompleteFile(circuitData: Uint8Array): Circuit {
     fixSign(circuit.camera_position);
     circuit.components.forEach(element => {
         fixSign(element.position);
+        element.kind = getComponentName(element.kind);
     });
 
     // the binary save format stores the wire points in terms of directions from the previous point
@@ -63,6 +64,6 @@ export function base64ToUint8(str: string): Uint8Array{
     return Uint8Array.from(atob(str), (c) => c.charCodeAt(0))
 }
 
-export function uint8ToBase64(arr: Uint8Array): string{
+export function uint8ToBase64(arr: Uint8Array): string {
     return btoa(Array(arr.length).fill('').map((_, i) => String.fromCharCode(arr[i])).join(''))
 }

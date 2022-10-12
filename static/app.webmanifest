@@ -1,10 +1,10 @@
 {
-    "$schema": "https://json.schemastore.org/web-manifest-combined.json",
     "name": "TuringGoesBrrr",
     "short_name": "TuringGoesBrrr",
     "start_url": "/circuit",
     "display": "standalone",
-    "background_color": "#fff",
+    "background_color": "#32394c",
+    "theme_color": "#32394c",
     "description": "Digital logic circuit simulator.",
     "icons": [
         {

@@ -40,12 +40,31 @@ function parseWire(wireXML: Element): Wire {
     let fromRaw = wireXML.attributes.getNamedItem("from").value;
     let toRaw = wireXML.attributes.getNamedItem("to").value;
 
+    let start = parsePos(fromRaw);
+    let end = parsePos(toRaw);
+    let points: Point[] = [];
 
-    console.log(fromRaw, toRaw)
-
+    // they only go on x or y axis so only one of the loops will run
+    let direction = {x: end.x - start.x, y: end.y - start.y};
+    for (let x=0;x<Math.abs(direction.x)+1;x++){
+        points.push({
+            x: start.x + (Math.sign(direction.x) * x),
+            y: start.y
+        })
+    }
+    if (points.length == 0) points.push(start);
+    let last = points[points.length - 1];
+    
+    // last is already there so dont have to start at y=0 to add the start point
+    for (let y=1;y<Math.abs(direction.y)+1;y++){
+        points.push({
+            x: last.x,
+            y: last.y + (Math.sign(direction.y) * y)
+        })
+    }
 
     return {
-        path: [{x:0,y:0}],
+        path: points,
         color: 0,
         comment: ""
     };
@@ -56,8 +75,12 @@ function parseComponent(componentXML: Element): Component {
     let name = componentXML.attributes.getNamedItem("name").value;
 
     return {
-        kind: 0,
-        position: {x: 0, y: 0}
+        kind: name,
+        position: parsePos(posRaw)
     };
 }
 
+function parsePos(pos: string){
+    let numbers = pos.slice(1, -1).split(",");
+    return {x: parseInt(numbers[0]) / 10, y: parseInt(numbers[1]) / 10};
+}
