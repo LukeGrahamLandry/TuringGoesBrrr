@@ -10,6 +10,7 @@ then
     rm choosenim.sh
     export PATH=~/.nimble/bin:$PATH 
     pip3 install markdown
+    pip3 install requests
 fi
 
 # create directory for third party libraries
@@ -52,7 +53,10 @@ cp -r static/* dist
 printf "\nconst COMMIT_HASH = \"$(git rev-parse HEAD)\"; \n" >> dist/service-worker.js
 
 # build markdown pages
-python3 md.py "docs" "dist" "https://turinggoesbrrr.com" true 
+python3 scripts/md.py "docs" "dist" "https://turinggoesbrrr.com" true 
+
+# builds versions.html, a table with links to past versions
+python3 scripts/cloudflare.py
 
 # print timer
 printf "\nProject built in $SECONDS seconds. \n"

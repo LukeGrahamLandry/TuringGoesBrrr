@@ -88,10 +88,3 @@ In save_monger I can export the `component_kind` enum so I can access the names 
 for kind in component_kind:
   SaveMonger.component_kinds[$kind] = kind
 ```
-
-## Cloudflare 
-
-- Use `printf` instead of `echo` because it was escaping the line breaks in my license headers. 
-- Couldn't figure out how to pass options when piping `curl choosenim` directly to bash. Instead, save it to a file, `chmod` it to be executable, and run passing `-y` to accept defaults. 
-
-After those changes it worked perfectly just pointing it at my github repo. 

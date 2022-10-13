@@ -46,8 +46,6 @@ Setup a little script that builds the markdown files in the docs directory into 
 
 Another script that minifies the JavaScript I depend on and adds license headers in a consistent format to the third party files that will be distributed by the site.
 
-Got everything in a `build.sh` that i can have CloudFlare Pages run for me when I want to publish the site. It also installs nim and python-markdown if they're missing (which they will be on CloudFlare's fresh image).
-
 ## base64
 
 When you import a TC Circuit file, its raw data is converted into a base64 string which is saved in the browser's local storage. This means that if you refresh the page, the last circuit you imported will remain available. 

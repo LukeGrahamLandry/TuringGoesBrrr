@@ -12,4 +12,11 @@ When you upload a circuit file, the string is passed to the appropriate `Circuit
 
 ## Build
 
-Run `./build.sh` then open `dist/index.html` in a browser. 
+Run `./scripts/build.sh` (must be run from the base project directory). Then open `dist/index.html` in a browser. Building on windows is not supported. 
+
+### Required Environment Variables
+
+- CLOUDFLARE_ACCOUNT_ID
+- CLOUDFLARE_PAGES_PROJECT_NAME
+- CLOUDFLARE_API_TOKEN
+    - required permissions: (Account - Cloudflare Pages - Read)
