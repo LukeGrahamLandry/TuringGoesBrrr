@@ -55,6 +55,7 @@
 - drop a file on the canvas to open it based on extension https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 - use webworkers to speed up simulation/life/brainfuck? https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers (same just async script as Service Worker just not specifically for intercepting network requests)
 - load/save to google drive / dropbox / one drive 
+- if i implement every x86 assembly instruction then can i just emulate normal c programs? someone did it in power point kinda https://www.youtube.com/watch?v=LArkm4v5mWA
 - figure out how to load js dynamically so you can only load the parsing for the file formats you want 
 
 ```javascript
@@ -84,6 +85,7 @@ requireModule("turingcomplete")
     - should be easy to only allow iframe from certain domains that paid
 2. patreon goals for new features
     - sponsor ware; everyone gets those features for free
+    - goal for open sourcing 
 3. sell premium version 
     - no ads
     - full screen mode 

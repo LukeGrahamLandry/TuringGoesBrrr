@@ -3,10 +3,11 @@
  Author: LukeGrahamLandry
  License: CC0, https://creativecommons.org/share-your-work/public-domain/cc0/
  Setup: pip3 install requests
+ Args: <template html file path, table code replaces "TABLE"> <output file path> <github id: "UserName/RepoName">
  Environment Variables: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_PAGES_PROJECT_NAME
 """
 
-import os, json, requests
+import os, sys, requests
 
 def getSecrets(*secret_keys):
     secret_values = []
@@ -68,16 +69,18 @@ def fetchPastPagesDeployments():
     return deployment_table_data
 
 
-def generatePagesTable(deployments, output_file):
+def generatePagesTable(deployments, template_file, output_file, github_id):
+    # TODO if i decide to open source, include Code: https://github.com/GITHUB_PROJECT_ID/archive/COMMIT_HASH.zip
     table_code = "<table> <tr> <th> Commit Message </th> <th> Hash </th> <th> Date </th> <th> Link </th>"
     row_template = """
         <tr>
             <td> COMMIT_MESSAGE </td>
-            <td> <a href="https://github.com/LukeGrahamLandry/TuringGoesBrrr/commit/COMMIT_HASH" target="_blank"> SHORT_HASH </a> </td>
+            <td> <a href="https://github.com/GITHUB_PROJECT_ID/commit/COMMIT_HASH" target="_blank"> SHORT_HASH </a> </td>
             <td> DATE </td>
             <td> <a href="PAGE_URL" target="_blank"> Open Site </a> </td>
         </tr>
-        """
+        """.replace("GITHUB_PROJECT_ID", github_id)
+        
     for replacements in deployments:
         row_code = row_template
 
@@ -88,11 +91,14 @@ def generatePagesTable(deployments, output_file):
 
     table_code += "</table>"
 
-    with open(output_file, "r") as f:
+    with open(template_file, "r") as f:
         template_code = "".join(f.readlines())
     
     with open(output_file, "w") as f:
         f.write(template_code.replace("TABLE", table_code))
 
 
-generatePagesTable(fetchPastPagesDeployments(), "dist/versions.html")
+if __name__ == "__main__":
+    script_file, template_file, out_file, github_project = sys.argv
+
+    generatePagesTable(fetchPastPagesDeployments(), template_file, out_file, github_project)

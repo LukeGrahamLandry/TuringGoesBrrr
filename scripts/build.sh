@@ -9,13 +9,14 @@ then
     ./choosenim.sh -y
     rm choosenim.sh
     export PATH=~/.nimble/bin:$PATH 
-    pip3 install markdown
-    pip3 install requests
 fi
+
+# copy static files for distribuiton 
+mkdir dist
+cp -r static/* dist
 
 # create directory for third party libraries
 cwd=$(pwd)
-mkdir dist
 mkdir dist/lib
 cd dist/lib
 
@@ -46,9 +47,6 @@ printf "window.TuringGoesBrrr.versionHash = \"$(git rev-parse HEAD)\"; \n" >> te
 cat dist/circuit.js >> temp
 mv temp dist/circuit.js
 
-# copy static files for distribuiton 
-cp -r static/* dist
-
 # add version to service worker script so browser notices update and cache gets refreshed 
 printf "\nconst COMMIT_HASH = \"$(git rev-parse HEAD)\"; \n" >> dist/service-worker.js
 
@@ -56,7 +54,7 @@ printf "\nconst COMMIT_HASH = \"$(git rev-parse HEAD)\"; \n" >> dist/service-wor
 python3 scripts/md.py "docs" "dist" "https://turinggoesbrrr.com" true 
 
 # builds versions.html, a table with links to past versions
-python3 scripts/cloudflare.py
+python3 scripts/cloudflare.py "static/versions.html" "dist/versions.html" "LukeGrahamLandry/TuringGoesBrrr"
 
 # print timer
 printf "\nProject built in $SECONDS seconds. \n"

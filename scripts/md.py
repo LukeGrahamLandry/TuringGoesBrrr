@@ -17,6 +17,7 @@ template_html = \
     <link rel="stylesheet" href="/style/md.css">
     <title> $TITLE </title>
     <link rel="canonical" href="$PATH">
+    <script defer data-domain="turinggoesbrrr.com" src="https://plausible.turinggoesbrrr.com/js/plausible.js"></script>
 </head>
 <body>
     <a href="/"> Home </a> <br>
@@ -40,7 +41,7 @@ def compileMD(from_file, to_file):
     html_content = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
     full_content = template_html.replace("$CONTENT", html_content) \
                                 .replace("$TITLE", "") \
-                                .replace("$PATH", config["url_prefix"] + to_file.replace("dist/", "/").replace(".html", ""))
+                                .replace("$PATH", config["url_prefix"] + to_file.replace("dist/", "/").replace(".html", ""))  #  TODO: "dist" should not be hardcoded
 
     with open(to_file, "w") as f:
         f.write(full_content)

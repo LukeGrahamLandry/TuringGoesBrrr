@@ -29,9 +29,10 @@ a {
 
 .markdown-body pre {
     background-color: rgb(247, 248, 250);
-    padding-left: 15px;
-    padding-right: 15px;
     line-height: 1;
+
+    width: 100%;
+    overflow-x: scroll;
 }
 
 .markdown-body code {
